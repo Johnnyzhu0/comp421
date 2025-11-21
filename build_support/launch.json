@@ -1,7 +1,4 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
@@ -29,7 +26,266 @@
                 }
             ],
             "preLaunchTask": "C++ make"
+        },
+        {
+            "name": "p3.00-primer.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.00-primer.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.01-seqscan.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.01-seqscan.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.02-insert.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.02-insert.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.03-update.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.03-update.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.04-delete.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.04-delete.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.05-index-scan-btree.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.05-index-scan-btree.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.06-empty-table.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.06-empty-table.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.07-simple-agg.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.07-simple-agg.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.08-group-agg-1.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.08-group-agg-1.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.09-group-agg-2.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.09-group-agg-2.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.10-simple-join.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.10-simple-join.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.11-multi-way-join.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.11-multi-way-join.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.12-repeat-execute.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.12-repeat-execute.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.13-nested-index-join.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.13-nested-index-join.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.14-hash-join.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.14-hash-join.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.15-multi-way-hash-join.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.15-multi-way-hash-join.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.16-sort-limit.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.16-sort-limit.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.17-topn.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.17-topn.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.18-integration-1.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.18-integration-1.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.19-integration-2.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.19-integration-2.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.20-window-function.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.20-window-function.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.leaderboard-q1-index.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.leaderboard-q1-index.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.leaderboard-q1-window.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.leaderboard-q1-window.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.leaderboard-q1.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.leaderboard-q1.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.leaderboard-q2.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.leaderboard-q2.slt"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "p3.leaderboard-q3.slt",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/bin/bustub-sqllogictest",
+            "args": [
+                "${workspaceFolder}/test/sql/p3.leaderboard-q3.slt"
+            ],
+            "cwd": "${workspaceFolder}"
         }
-
     ]
 }
