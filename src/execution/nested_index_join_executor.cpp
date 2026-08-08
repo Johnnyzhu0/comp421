@@ -24,7 +24,7 @@ namespace bustub {
 NestedIndexJoinExecutor::NestedIndexJoinExecutor(ExecutorContext *exec_ctx, const NestedIndexJoinPlanNode *plan,
                                                  std::unique_ptr<AbstractExecutor> &&child_executor)
     : AbstractExecutor(exec_ctx) {
-  if (!(plan->GetJoinType() == JoinType::LEFT || plan->GetJoinType() == JoinType::INNER)) {
+  if (plan->GetJoinType() != JoinType::LEFT && plan->GetJoinType() != JoinType::INNER) {
     // Note for Spring 2025: You ONLY need to implement left join and inner join.
     throw bustub::NotImplementedException(fmt::format("join type {} not supported", plan->GetJoinType()));
   }
@@ -33,6 +33,9 @@ NestedIndexJoinExecutor::NestedIndexJoinExecutor(ExecutorContext *exec_ctx, cons
 
 void NestedIndexJoinExecutor::Init() { UNIMPLEMENTED("TODO(P3): Add implementation."); }
 
-auto NestedIndexJoinExecutor::Next(Tuple *tuple, RID *rid) -> bool { UNIMPLEMENTED("TODO(P3): Add implementation."); }
+auto NestedIndexJoinExecutor::Next(std::vector<bustub::Tuple> *tuple_batch, std::vector<bustub::RID> *rid_batch,
+                                   size_t batch_size) -> bool {
+  UNIMPLEMENTED("TODO(P3): Add implementation.");
+}
 
 }  // namespace bustub
