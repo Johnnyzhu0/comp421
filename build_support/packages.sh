@@ -91,6 +91,7 @@ install_linux() {
       clang-${CLANG_VERSION} \
       clang-format-${CLANG_VERSION} \
       clang-tidy-${CLANG_VERSION} \
+      clangd-${CLANG_VERSION} \
       cmake \
       doxygen \
       git \

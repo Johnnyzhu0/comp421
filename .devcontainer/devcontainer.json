@@ -1,9 +1,38 @@
 {
-      "name": "Bustub UNC Development",
-      "image": "ubuntu:22.04",
+  "name": "Bustub UNC Development",
+  "image": "ubuntu:22.04",
+  "updateRemoteUserUID": true,
+  "containerEnv": {
+    "CC": "clang-15",
+    "CXX": "clang++-15"
+  },
+  "runArgs": [
+    "--security-opt", "seccomp=unconfined",
+    "--cap-add", "SYS_PTRACE"
+  ],
+  "customizations": {
+    "vscode": {
       "extensions": [
-        "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode"
+        "ms-vscode.cmake-tools",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "ms-vscode.cpptools"
       ],
-      "postCreateCommand" : "echo y | ./build_support/packages.sh; git remote add public https://github.com/bsb20/bustub"
+      "settings": {
+        "C_Cpp.intelliSenseEngine": "disabled",
+        "cmake.configureOnOpen": true,
+        "cmake.useCMakePresets": "always",
+        "cmake.debugConfig": {
+          "environment": [
+            { "name": "ASAN_OPTIONS", "value": "detect_leaks=0" }
+          ]
+        },
+        "clangd.path": "clangd-15",
+        "clangd.arguments": [
+          "--background-index",
+          "--compile-commands-dir=${workspaceFolder}/build"
+        ]
+      }
+    }
+  },
+  "postCreateCommand" : "echo y | ./build_support/packages.sh; git remote add public https://github.com/bsb20/bustub"
 }
