@@ -88,19 +88,26 @@ This script will create and set up a container image for bustub, or attach to a 
 Some MacOS users have reported a `command not found: docker` error when first running this script.  If you see this error, you most likely need to [add docker to your PATH](https://stackoverflow.com/questions/64009138/docker-command-not-found-when-running-on-mac).
 
 ### Option 2: VS Code Dev Containers
-If you prefer to use VS Code, this repository is set up to integrate with the VS Code Dev Containers extension.
-You can use this by:
-1.  Installing the [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) extension
+If you prefer to use VS Code, this repository is set up to integrate with the VS Code Dev Containers extension. In this workflow you clone your personal course repository onto your **host** machine and open that folder inside a container. Because your code lives in a normal clone on the host, your commits, branches, and git credentials stay on the host and your work is never trapped inside (or lost with) the container.
 
-2.  In VS Code, from the command palette (<kbd>F1</kbd>), select ***Dev Containers: Clone Repository in Named Container Volume***
+1.  Install the [Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) extension in VS Code.
 
-3.  Enter a name for the named docker volume (can be any name, something like bustub-volume)
+2.  Clone your personal course repository if you have not already:
 
-4.  Confirm the name of your working directory (should be auto-populated by VS Code)
+    ```console
+    $ git clone <your-personal-repo-url>
+    ```
 
-**WARNING: If you are not prompted for a volume name as in step (3) above, you selected the wrong Dev Containers option in step 2.  Please select the named volume option to prevent data loss.**
+3.  Open VS Code.  From the command palette (<kbd>F1</kbd>), run ***Dev Containers: Open Folder in Container...*** and select the folder you cloned your repo into. Wait for the container to build. The first time, it automatically installs all required packages, so this may take a few minutes. Subsequent launches are fast.
 
-You should now be able to develop, test, and commit code directly from the container or VS Code.
+4.  Once the container is running, we must set the build configuration using the **CMake** tab. Click the CMake icon (triangle with a wrench) on the left side bar. Select a *Configure Preset*.  We provide some preset configurations:
+
+    - **Debug** &mdash; debug build with [AddressSanitizer](https://github.com/google/sanitizers) (the default).
+    - **Debug (TSan)** &mdash; debug build with ThreadSanitizer, equivalent to `-DBUSTUB_SANITIZER=thread`. Use this for assignments and tests that require the thread sanitizer.
+    - **Release** &mdash; optimized build with no sanitizer.
+    - **RelWithDebInfo** &mdash; optimized build with debug info.
+
+5.  To build and debug a specific test, click to select a target under the CMake **Launch** or **Debug** options. For example, type the test name you want when prompted.  With a target selected, you can now click Launch/Debug from within **CMake** or at the bottom of the window.
 
 ### Linux (Recommended) / macOS (Experimental)
 
