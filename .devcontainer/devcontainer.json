@@ -24,6 +24,7 @@
       ],
       "settings": {
         "C_Cpp.intelliSenseEngine": "disabled",
+        "debug.showVariableTypes": true,
         "cmake.configureOnOpen": true,
         "cmake.useCMakePresets": "always",
         "cmake.debugConfig": {
