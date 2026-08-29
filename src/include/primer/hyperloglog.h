@@ -20,7 +20,10 @@
 #include <string>
 #include <utility>
 #include <vector>
+
 #include "common/util/hash_util.h"
+#include "type/type_id.h"
+#include "type/value.h"
 
 /** @brief Capacity of the bitset stream. */
 static constexpr int BITSET_CAPACITY = 64;
@@ -43,7 +46,7 @@ class HyperLogLog {
    *
    * @returns cardinality value
    */
-  auto GetCardinality() { return cardinality_; }
+  auto GetCardinality() -> size_t { return cardinality_; }
 
   auto AddElem(KeyType val) -> void;
 
@@ -79,63 +82,4 @@ class HyperLogLog {
   std::mutex mutex_;
 };
 
-template <typename KeyType>
-HyperLogLog<KeyType>::HyperLogLog(int16_t n_bits) : cardinality_(0), n_bits_(n_bits) {
-  if (n_bits > 0) {
-    registers_.resize(1ULL << n_bits, 0);
-  }
-}
-
-template <typename KeyType>
-auto HyperLogLog<KeyType>::ComputeBinary(const hash_t &hash) const -> std::bitset<BITSET_CAPACITY> {
-  return {hash};
-}
-// Find position of leftmost 1 //
-template <typename KeyType>
-auto HyperLogLog<KeyType>::PositionOfLeftmostOne(const std::bitset<BITSET_CAPACITY> &bset) const -> uint64_t {
-  int remaining_bits = BITSET_CAPACITY - n_bits_;
-  for (int i = remaining_bits - 1; i >= 0; i--) {
-    if (bset[i]) {
-      return remaining_bits - i;
-    }
-  }
-  return 0;
-}
-// Add an element to the HyperLogLog//
-template <typename KeyType>
-auto HyperLogLog<KeyType>::AddElem(KeyType val) -> void {
-  if (n_bits_ < 0) {
-    return;
-  }
-  auto hash = CalculateHash(val);
-  auto binary = ComputeBinary(hash);
-  // Assigns Hash to a register//
-  size_t register_index = 0;
-  if (n_bits_ > 0) {
-    for (int i = BITSET_CAPACITY - 1; i >= BITSET_CAPACITY - n_bits_; i--) {
-      register_index = (register_index << 1) | binary[i];
-    }
-  }
-  int remaining_bits = BITSET_CAPACITY - n_bits_;
-  auto position = PositionofLeftmostOne(binary, remaining_bits);
-  {
-    std::lock_guard<std::mutex> lock(mutex_);
-    registers_[register_index] = std::max(registers_[register_index], position);
-  }
-}
-// Compute Cardinality of HyperLogLog //
-template <typename KeyType>
-auto HyperLogLog<KeyType>::ComputeCardinality() -> void {
-  if (registers_.empty()) {
-    cardinality_ = 0;
-    return;
-  }
-  const size_t m = registers_.size();
-  double sum = 0.0;
-  for (auto value : registers_) {
-    sum += std::pow(2.0, -static_cast<double>(value));
-  }
-  const double estimate = CONSTANT * static_cast<double>(m) * static_cast<double>(m) / sum;
-  cardinality_ = static_cast<size_t>(std::floor(estimate));
-}
 }  // namespace bustub

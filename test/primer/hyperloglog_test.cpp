@@ -22,6 +22,8 @@
 #include "primer/hyperloglog_presto.h"
 
 namespace bustub {
+template class HyperLogLog<int64_t>;
+template class HyperLogLog<std::string>;
 
 TEST(HyperLogLogTest, BasicTest1) {
   auto obj = HyperLogLog<std::string>(static_cast<int16_t>(1));
