@@ -77,15 +77,14 @@ class HyperLogLog {
   /** @todo (student) can add their data structures that support HyperLogLog */
   int16_t n_bits_;
   std::vector<uint64_t> registers_;
+  std::mutex mutex_;
 };
 
 template <typename KeyType>
 HyperLogLog<KeyType>::HyperLogLog(int16_t n_bits) : cardinality_(0), n_bits_(n_bits){
   if (n_bits > 0) {
     registers_.resize(1ULL << n_bits, 0);
-  } else if (n_bits == 0) {
-    registers_.resize(1,0);
-  }
+  } 
 }
 
 template <typename KeyType>
@@ -95,12 +94,13 @@ auto HyperLogLog<KeyType>::ComputeBinary(const hash_t &hash) const -> std::bitse
 // Find position of leftmost 1 //
 template <typename KeyType>
 auto HyperLogLog<KeyType>::PositionOfLeftmostOne(const std::bitset<BITSET_CAPACITY> &bset) const -> uint64_t {
-  for (int i = BITSET_CAPACITY - 1; i >= 0; i--) {
+  int remaining_bits = BITSET_CAPACITY - n_bits_;
+  for (int i = remaining_bits - 1; i >= 0; i--) {
     if (bset[i]) {
-      return BITSET_CAPACITY - i;
+      return remaining_bits - i;
     }
   }
-  return BITSET_CAPACITY;
+  return 0;
 }
 // Add an element to the HyperLogLog//
 template <typename KeyType>
@@ -112,18 +112,17 @@ auto HyperLogLog<KeyType>::AddElem(KeyType val) -> void {
   auto binary = ComputeBinary(hash);
   // Assigns Hash to a register//
   size_t register_index = 0;
-  for (int i = BITSET_CAPACITY - 1;
-   i >= BITSET_CAPACITY - n_bits_; i--) {
-    register_index = (register_index << 1) | binary[i];
+  if (n_bits_ > 0) {
+    for (int i = BITSET_CAPACITY - 1; i >= BITSET_CAPACITY - n_bits_; i--) {
+      register_index = (register_index << 1) | binary[i];
+    }
   }
-  // Finds the positon of leftmost 1  //
-  std::bitset<BITSET_CAPACITY> binary_copy;
-  for (int i = BITSET_CAPACITY - n_bits_ - 1; i >= 0; i--) {
-    binary_copy[i] = binary[i];
+  int remaining_bits = BITSET_CAPACITY - n_bits_;
+  auto position = PositionofLeftmostOne(binary, remaining_bits);
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    registers_[register_index] = std::max(registers_[register_index], position);
   }
-  auto position = PositionOfLeftmostOne(binary_copy);
-  // Updates the register with the maximum position of leftmost 1 //
-  registers_[register_index] = std::max(registers_[register_index], position);
 }
 // Compute Cardinality of HyperLogLog //
 template <typename KeyType>
