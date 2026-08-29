@@ -14,50 +14,64 @@
 
 namespace bustub {
 
-/** @brief Parameterized constructor. */
 template <typename KeyType>
-HyperLogLog<KeyType>::HyperLogLog(int16_t n_bits) : cardinality_(0) {}
+HyperLogLog<KeyType>::HyperLogLog(int16_t n_bits) : cardinality_(0), n_bits_(n_bits) {
+  if (n_bits_ >= 0) {
+    registers_.resize(1ULL << n_bits_, 0);
+  }
+}
 
-/**
- * @brief Function that computes binary.
- *
- * @param[in] hash
- * @returns binary of a given hash
- */
 template <typename KeyType>
 auto HyperLogLog<KeyType>::ComputeBinary(const hash_t &hash) const -> std::bitset<BITSET_CAPACITY> {
-  /** @TODO(student) Implement this function! */
-  return {0};
+  return {hash};
 }
 
-/**
- * @brief Function that computes leading zeros.
- *
- * @param[in] bset - binary values of a given bitset
- * @returns leading zeros of given binary set
- */
 template <typename KeyType>
 auto HyperLogLog<KeyType>::PositionOfLeftmostOne(const std::bitset<BITSET_CAPACITY> &bset) const -> uint64_t {
-  /** @TODO(student) Implement this function! */
-  return 0;
+  int remaining_bits = BITSET_CAPACITY - n_bits_;
+  for (int i = 0; i < remaining_bits; i++) {
+    if (bset[i]) {
+      return static_cast<uint64_t>(i) + 1;
+    }
+  }
+  return static_cast<uint64_t>(remaining_bits) + 1;
 }
 
-/**
- * @brief Adds a value into the HyperLogLog.
- *
- * @param[in] val - value that's added into hyperloglog
- */
 template <typename KeyType>
 auto HyperLogLog<KeyType>::AddElem(KeyType val) -> void {
-  /** @TODO(student) Implement this function! */
+  if (n_bits_ < 0) {
+    return;
+  }
+  auto hash = CalculateHash(val);
+  auto binary = ComputeBinary(hash);
+
+  size_t register_index = 0;
+  if (n_bits_ > 0) {
+    for (int i = BITSET_CAPACITY - 1; i >= BITSET_CAPACITY - n_bits_; i--) {
+      register_index = (register_index << 1) | static_cast<size_t>(binary[i]);
+    }
+  }
+
+  auto position = PositionOfLeftmostOne(binary);
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    registers_[register_index] = std::max(registers_[register_index], position);
+  }
 }
 
-/**
- * @brief Function that computes cardinality.
- */
 template <typename KeyType>
 auto HyperLogLog<KeyType>::ComputeCardinality() -> void {
-  /** @TODO(student) Implement this function! */
+  if (registers_.empty()) {
+    cardinality_ = 0;
+    return;
+  }
+  const size_t m = registers_.size();
+  double sum = 0.0;
+  for (auto value : registers_) {
+    sum += std::pow(2.0, -static_cast<double>(value));
+  }
+  const double estimate = CONSTANT * static_cast<double>(m) * static_cast<double>(m) / sum;
+  cardinality_ = static_cast<size_t>(std::floor(estimate));
 }
 
 template class HyperLogLog<int64_t>;

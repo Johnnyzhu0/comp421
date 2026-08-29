@@ -55,11 +55,16 @@ auto HyperLogLogPresto<KeyType>::AddElem(KeyType val) -> void {
 
   uint64_t position = 0;
   int remaining_bits = 64 - n_leading_bits_;
+  bool found_one = false;
   for (int i = 0; i < remaining_bits; i++) {
     if (binary[i]) {
-      position = i + 1;
+      position = static_cast<uint64_t>(i);
+      found_one = true;
       break;
     }
+  }
+  if (!found_one) {
+    position = static_cast<uint64_t>(remaining_bits);
   }
 
   std::lock_guard<std::mutex> lock(mutex_);
