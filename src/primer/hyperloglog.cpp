@@ -29,9 +29,9 @@ auto HyperLogLog<KeyType>::ComputeBinary(const hash_t &hash) const -> std::bitse
 template <typename KeyType>
 auto HyperLogLog<KeyType>::PositionOfLeftmostOne(const std::bitset<BITSET_CAPACITY> &bset) const -> uint64_t {
   int remaining_bits = BITSET_CAPACITY - n_bits_;
-  for (int i = 0; i < remaining_bits; i++) {
+  for (int i = remaining_bits - 1; i >= 0; i--) {
     if (bset[i]) {
-      return static_cast<uint64_t>(i) + 1;
+      return static_cast<uint64_t>(remaining_bits - i);
     }
   }
   return static_cast<uint64_t>(remaining_bits) + 1;
