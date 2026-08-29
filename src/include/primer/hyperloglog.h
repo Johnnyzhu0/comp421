@@ -12,14 +12,14 @@
 
 #pragma once
 
+#include <algorithm>
 #include <bitset>
+#include <cmath>
 #include <memory>
 #include <mutex>  // NOLINT
 #include <string>
 #include <utility>
 #include <vector>
-#include <cmath>
-#include <algorithm>
 #include "common/util/hash_util.h"
 
 /** @brief Capacity of the bitset stream. */
@@ -37,7 +37,6 @@ class HyperLogLog {
   HyperLogLog() = delete;
 
   explicit HyperLogLog(int16_t n_bits);
-
 
   /**
    * @brief Getter value for cardinality.
@@ -81,10 +80,10 @@ class HyperLogLog {
 };
 
 template <typename KeyType>
-HyperLogLog<KeyType>::HyperLogLog(int16_t n_bits) : cardinality_(0), n_bits_(n_bits){
+HyperLogLog<KeyType>::HyperLogLog(int16_t n_bits) : cardinality_(0), n_bits_(n_bits) {
   if (n_bits > 0) {
     registers_.resize(1ULL << n_bits, 0);
-  } 
+  }
 }
 
 template <typename KeyType>
@@ -133,8 +132,8 @@ auto HyperLogLog<KeyType>::ComputeCardinality() -> void {
   }
   const size_t m = registers_.size();
   double sum = 0.0;
-  for (auto value : registers_){
-    sum += std::pow(2.0, -static_cast<double>(value));  
+  for (auto value : registers_) {
+    sum += std::pow(2.0, -static_cast<double>(value));
   }
   const double estimate = CONSTANT * static_cast<double>(m) * static_cast<double>(m) / sum;
   cardinality_ = static_cast<size_t>(std::floor(estimate));
