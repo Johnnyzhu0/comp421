@@ -206,7 +206,10 @@ auto main(int argc, char **argv) -> int {
   }
 
   auto disk_manager = std::make_unique<DiskManagerUnlimitedMemory>();
-  auto bpm = std::make_unique<BufferPoolManager>(bustub_bpm_size, disk_manager.get());
+  // The benchmarks drive the "leaderboard" policy so that if a faster replacer is
+  // wired into the factory it is picked up here without changing anything else.
+  auto bpm =
+      std::make_unique<BufferPoolManager>(bustub_bpm_size, disk_manager.get(), nullptr, lru_k_size, "leaderboard");
   std::vector<page_id_t> page_ids;
 
   fmt::print(stderr,

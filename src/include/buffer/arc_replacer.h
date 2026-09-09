@@ -19,12 +19,11 @@
 #include <optional>
 #include <unordered_map>
 
+#include "buffer/simple_replacer.h"
 #include "common/config.h"
 #include "common/macros.h"
 
 namespace bustub {
-
-enum class AccessType { Unknown = 0, Lookup, Scan, Index };
 
 enum class ArcStatus { MRU, MFU, MRU_GHOST, MFU_GHOST };
 
@@ -39,10 +38,14 @@ struct FrameStatus {
 };
 
 /**
- * ArcReplacer implements the ARC replacement policy.
+ * ArcReplacer implements the ARC replacement policy. It is a `SimpleReplacer`, so
+ * a `BufferPoolManager` can use it in place of `LRUKReplacer` (e.g. as a
+ * leaderboard entry).
  */
-class ArcReplacer {
+class ArcReplacer : public SimpleReplacer {
  public:
+  using SimpleReplacer::RecordAccess;  // unhide overloads
+
   explicit ArcReplacer(size_t num_frames);
 
   DISALLOW_COPY_AND_MOVE(ArcReplacer);
@@ -52,13 +55,13 @@ class ArcReplacer {
    *
    * @brief Destroys the LRUReplacer.
    */
-  ~ArcReplacer() = default;
+  ~ArcReplacer() override = default;
 
-  auto Evict() -> std::optional<frame_id_t>;
-  void RecordAccess(frame_id_t frame_id, page_id_t page_id, AccessType access_type = AccessType::Unknown);
-  void SetEvictable(frame_id_t frame_id, bool set_evictable);
-  void Remove(frame_id_t frame_id);
-  auto Size() -> size_t;
+  auto Evict() -> std::optional<frame_id_t> override;
+  void RecordAccess(frame_id_t frame_id, page_id_t page_id, AccessType access_type) override;
+  void SetEvictable(frame_id_t frame_id, bool set_evictable) override;
+  void Remove(frame_id_t frame_id) override;
+  auto Size() -> size_t override;
 
  private:
   // TODO(student): implement me! You can replace or remove these member variables as you like.
@@ -66,7 +69,6 @@ class ArcReplacer {
   std::list<frame_id_t> mfu_;
   std::list<page_id_t> mru_ghost_;
   std::list<page_id_t> mfu_ghost_;
-
   /* record entries in mru_ and mfu_
    * this uses frame_id_t to guarantee no duplicate records for the same
    * frame when they are alive */

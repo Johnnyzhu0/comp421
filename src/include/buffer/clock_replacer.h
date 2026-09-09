@@ -23,6 +23,12 @@ namespace bustub {
 
 /**
  * ClockReplacer implements the clock replacement policy, which approximates the Least Recently Used policy.
+ *
+ * @deprecated Legacy replacer on the old `Replacer` interface (`Victim`/`Pin`/
+ * `Unpin`), NOT compatible with `BufferPoolManager`, which now expects a
+ * `SimpleReplacer` (`Evict`/`RecordAccess`/`SetEvictable`/`Remove`). Prefer
+ * `LRUKReplacer` or `ArcReplacer`; port this onto `SimpleReplacer` before wiring
+ * it into the buffer pool.
  */
 class ClockReplacer : public Replacer {
  public:

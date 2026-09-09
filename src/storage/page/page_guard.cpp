@@ -12,7 +12,7 @@
 
 #include "storage/page/page_guard.h"
 #include <memory>
-#include "buffer/arc_replacer.h"
+#include "buffer/simple_replacer.h"
 #include "common/macros.h"
 
 namespace bustub {
@@ -31,7 +31,7 @@ namespace bustub {
  * @param disk_scheduler A shared pointer to the buffer pool manager's disk scheduler.
  */
 ReadPageGuard::ReadPageGuard(page_id_t page_id, std::shared_ptr<FrameHeader> frame,
-                             std::shared_ptr<ArcReplacer> replacer, std::shared_ptr<std::mutex> bpm_latch,
+                             std::shared_ptr<SimpleReplacer> replacer, std::shared_ptr<std::mutex> bpm_latch,
                              std::shared_ptr<DiskScheduler> disk_scheduler)
     : page_id_(page_id),
       frame_(std::move(frame)),
@@ -142,7 +142,7 @@ ReadPageGuard::~ReadPageGuard() { Drop(); }
  * @param disk_scheduler A shared pointer to the buffer pool manager's disk scheduler.
  */
 WritePageGuard::WritePageGuard(page_id_t page_id, std::shared_ptr<FrameHeader> frame,
-                               std::shared_ptr<ArcReplacer> replacer, std::shared_ptr<std::mutex> bpm_latch,
+                               std::shared_ptr<SimpleReplacer> replacer, std::shared_ptr<std::mutex> bpm_latch,
                                std::shared_ptr<DiskScheduler> disk_scheduler)
     : page_id_(page_id),
       frame_(std::move(frame)),

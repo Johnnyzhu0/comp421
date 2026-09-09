@@ -19,7 +19,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "buffer/arc_replacer.h"
+#include "buffer/simple_replacer.h"
 #include "common/config.h"
 #include "common/macros.h"
 
@@ -47,8 +47,10 @@ class LRUKNode {
  * +inf as its backward k-distance. When multiple frames have +inf backward k-distance,
  * classical LRU algorithm is used to choose victim.
  */
-class LRUKReplacer {
+class LRUKReplacer : public SimpleReplacer {
  public:
+  using SimpleReplacer::RecordAccess;  // unhide overloads
+
   explicit LRUKReplacer(size_t num_frames, size_t k);
 
   DISALLOW_COPY_AND_MOVE(LRUKReplacer);
@@ -58,17 +60,22 @@ class LRUKReplacer {
    *
    * @brief Destroys the LRUReplacer.
    */
-  ~LRUKReplacer() = default;
+  ~LRUKReplacer() override = default;
 
-  auto Evict() -> std::optional<frame_id_t>;
+  auto Evict() -> std::optional<frame_id_t> override;
 
-  void RecordAccess(frame_id_t frame_id, AccessType access_type = AccessType::Unknown);
+  /**
+   * @brief Records an access to `frame_id`. `page_id` is part of the interface and
+   * available to every replacer (ARC keys its ghost history on it), but LRU-K tracks
+   * frames only, so it is not needed to complete this method.
+   */
+  void RecordAccess(frame_id_t frame_id, page_id_t page_id, AccessType access_type) override;
 
-  void SetEvictable(frame_id_t frame_id, bool set_evictable);
+  void SetEvictable(frame_id_t frame_id, bool set_evictable) override;
 
-  void Remove(frame_id_t frame_id);
+  void Remove(frame_id_t frame_id) override;
 
-  auto Size() -> size_t;
+  auto Size() -> size_t override;
 
  private:
   // TODO(student): implement me! You can replace these member variables as you like.

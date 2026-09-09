@@ -18,6 +18,11 @@ namespace bustub {
 
 /**
  * Replacer is an abstract class that tracks page usage.
+ *
+ * @deprecated This is the legacy replacer interface (`Victim`/`Pin`/`Unpin`), used
+ * only by `LRUReplacer` and `ClockReplacer`. `BufferPoolManager` now uses the
+ * `SimpleReplacer` interface (`Evict`/`RecordAccess`/`SetEvictable`/`Remove`; see
+ * "buffer/simple_replacer.h"). New replacers should derive from `SimpleReplacer`.
  */
 class Replacer {
  public:

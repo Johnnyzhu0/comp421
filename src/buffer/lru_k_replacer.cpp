@@ -51,10 +51,13 @@ auto LRUKReplacer::Evict() -> std::optional<frame_id_t> { return std::nullopt; }
  * also use BUSTUB_ASSERT to abort the process if frame id is invalid.
  *
  * @param frame_id id of frame that received a new access.
+ * @param page_id id of the page held by the frame. Available to every replacer via
+ * the `SimpleReplacer` interface, but not needed to complete LRU-K.
  * @param access_type type of access that was received. This parameter is only needed for
  * leaderboard tests.
  */
-void LRUKReplacer::RecordAccess(frame_id_t frame_id, [[maybe_unused]] AccessType access_type) {}
+void LRUKReplacer::RecordAccess(frame_id_t frame_id, [[maybe_unused]] page_id_t page_id,
+                                [[maybe_unused]] AccessType access_type) {}
 
 /**
  * TODO(P1): Add implementation

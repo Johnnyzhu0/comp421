@@ -23,6 +23,12 @@ namespace bustub {
 
 /**
  * LRUReplacer implements the Least Recently Used replacement policy.
+ *
+ * @deprecated Legacy replacer on the old `Replacer` interface (`Victim`/`Pin`/
+ * `Unpin`), NOT compatible with `BufferPoolManager`, which now expects a
+ * `SimpleReplacer` (`Evict`/`RecordAccess`/`SetEvictable`/`Remove`). Prefer
+ * `LRUKReplacer` (LRU-K with k=1 is equivalent to classic LRU); port this onto
+ * `SimpleReplacer` before wiring it into the buffer pool.
  */
 class LRUReplacer : public Replacer {
  public:
