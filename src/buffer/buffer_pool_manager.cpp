@@ -117,13 +117,13 @@ void BufferPoolManager::DiskIo(bool is_write, page_id_t page_id, char *data) {
   disk_scheduler_->Schedule(requests);
   future.get();
 }
-auto BufferPoolManager::PinPage(page_id_t page_id, AccessType access_type) ->std::shared_ptr<FrameHeader> {
+auto BufferPoolManager::PinPage(page_id_t page_id, AccessType access_type) -> std::shared_ptr<FrameHeader> {
   frame_id_t fid = -1;
   auto it = page_table_.find(page_id);
-  if (it != page_table_.end()){
+  if (it != page_table_.end()) {
     fid = it->second;
   } else {
-    if (!free_frames_.empty()){
+    if (!free_frames_.empty()) {
       fid = free_frames_.front();
       free_frames_.pop_front();
     } else {
@@ -133,7 +133,7 @@ auto BufferPoolManager::PinPage(page_id_t page_id, AccessType access_type) ->std
       }
       fid = *victim;
       auto &old = frames_[fid];
-      if (old->is_dirty_){
+      if (old->is_dirty_) {
         DiskIo(true, old->page_id_, old->GetDataMut());
       }
       page_table_.erase(old->page_id_);
@@ -162,7 +162,7 @@ auto BufferPoolManager::PinPage(page_id_t page_id, AccessType access_type) ->std
  *
  * @return The page ID of the newly allocated page.
  */
-auto BufferPoolManager::NewPage() -> page_id_t {return next_page_id_.fetch_add(1);}
+auto BufferPoolManager::NewPage() -> page_id_t { return next_page_id_.fetch_add(1); }
 
 /**
  * @brief Removes a page from the database, both on disk and in memory.
@@ -183,7 +183,7 @@ auto BufferPoolManager::NewPage() -> page_id_t {return next_page_id_.fetch_add(1
  * @param page_id The page ID of the page we want to delete.
  * @return `false` if the page exists but could not be deleted, `true` if the page didn't exist or deletion succeeded.
  */
-auto BufferPoolManager::DeletePage(page_id_t page_id) -> bool { 
+auto BufferPoolManager::DeletePage(page_id_t page_id) -> bool {
   std::scoped_lock lock(*bpm_latch_);
   auto it = page_table_.find(page_id);
   if (it != page_table_.end()) {
@@ -281,7 +281,7 @@ auto BufferPoolManager::CheckedReadPage(page_id_t page_id, AccessType access_typ
   {
     std::scoped_lock lock(*bpm_latch_);
     frame = PinPage(page_id, access_type);
-    if (frame == nullptr){
+    if (frame == nullptr) {
       return std::nullopt;
     }
   }
@@ -360,7 +360,7 @@ auto BufferPoolManager::ReadPage(page_id_t page_id, AccessType access_type) -> R
 auto BufferPoolManager::FlushPageUnsafe(page_id_t page_id) -> bool {
   std::scoped_lock lock(*bpm_latch_);
   auto it = page_table_.find(page_id);
-  if (it == page_table_.end()){
+  if (it == page_table_.end()) {
     return false;
   }
   auto &frame = frames_[it->second];
@@ -392,7 +392,7 @@ auto BufferPoolManager::FlushPage(page_id_t page_id) -> bool {
   {
     std::scoped_lock lock(*bpm_latch_);
     auto it = page_table_.find(page_id);
-    if (it == page_table_.end()){
+    if (it == page_table_.end()) {
       return false;
     }
     frame = frames_[it->second];
@@ -406,7 +406,7 @@ auto BufferPoolManager::FlushPage(page_id_t page_id) -> bool {
   }
   {
     std::scoped_lock lock(*bpm_latch_);
-    if(frame->pin_count_.fetch_sub(1) == 1){
+    if (frame->pin_count_.fetch_sub(1) == 1) {
       replacer_->SetEvictable(frame->frame_id_, true);
     }
   }
@@ -451,11 +451,11 @@ void BufferPoolManager::FlushAllPages() {
   std::vector<page_id_t> page_ids;
   {
     std::scoped_lock lock(*bpm_latch_);
-    for (const auto &entry : page_table_){
+    for (const auto &entry : page_table_) {
       page_ids.push_back(entry.first);
     }
   }
-  for (page_id_t pid:page_ids){
+  for (page_id_t pid : page_ids) {
     FlushPage(pid);
   }
 }
@@ -487,7 +487,7 @@ void BufferPoolManager::FlushAllPages() {
 auto BufferPoolManager::GetPinCount(page_id_t page_id) -> std::optional<size_t> {
   std::scoped_lock lock(*bpm_latch_);
   auto it = page_table_.find(page_id);
-  if (it == page_table_.end()){
+  if (it == page_table_.end()) {
     return std::nullopt;
   }
   return frames_[it->second]->pin_count_.load();
