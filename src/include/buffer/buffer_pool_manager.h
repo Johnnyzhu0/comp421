@@ -88,6 +88,7 @@ class FrameHeader {
    * If the frame does not hold any page data, the frame contains all null bytes.
    */
   std::vector<char> data_;
+  page_id_t page_id_{INVALID_PAGE_ID};
 
   /**
    * TODO(P1): You may add any fields or helper functions under here that you think are necessary.
@@ -163,6 +164,9 @@ class BufferPoolManager {
    * Note: Please ignore this for P1.
    */
   LogManager *log_manager_ __attribute__((__unused__));
+
+  auto PinPage(page_id_t page_id, AccessType access_type) -> std::shared_ptr<FrameHeader>;
+  void DiskIo(bool is_write, page_id_t page_id, char *data);
 
   /**
    * TODO(P1): You may add additional private members and helper functions if you find them necessary.
